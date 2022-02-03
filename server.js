@@ -16,12 +16,13 @@ io.on('connect', function(socket){
         var args = {};
         var soap = require('soap');
         var url = 'http://127.0.0.1:8000/?wsdl';
+        /*
         soap.createClient(url, function(err, client) {
             client.carList(args, function(err, result) {
                 console.log(result);
                 io.emit("res",result);
             });
-        });
+        });*/
         
     })
 })
