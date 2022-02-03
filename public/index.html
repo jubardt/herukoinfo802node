@@ -47,7 +47,12 @@
                 var tab = dico[select.value];
                 var heure = Math.floor(tab[1]/60);
                 var minutes = tab[1]%60;
-                charge.innerText = "Temps de chargement: "+heure + " heures " + ((minutes>0)?"et " + minutes +" minutes":"");
+                if(heure==0){
+                    charge.innerText = "Temps de chargement: "+ minutes +" minutes";
+                }else{
+                    charge.innerText = "Temps de chargement: "+heure + " heures " + ((minutes>0)?"et " + minutes +" minutes":"");
+                }
+                
                 batterie.innerText = "Autonomie: "+tab[0] +" km";
             }
 
