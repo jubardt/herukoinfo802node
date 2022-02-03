@@ -8,7 +8,7 @@ const server = express().use(express.static("public"))
 
 const io = socketIO(server);
 var args = {};
-var url = 'http://127.0.0.1:8000/?wsdl';
+var url = 'https://serve-python-soap.herokuapp.com/?wsdl';
 
 io.on('connection', (socket)=>{
     console.log('client connecte');
