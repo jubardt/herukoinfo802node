@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Préparation de trajet</title>
+    </head>
+    <body>
+    <header>
+        <h1>Préparation de trajet</h1>
+        <p>Ce site web permet la préparation d'itinéraire en fonction du véhicule éléctrique choisie !<br>
+            En fonction de l'état de la batterie et du temps de rechargement, vous pourrez ainsi <br>
+            préparer vos trajets sereinements
+        </p>
+
+    </header>
+
+    <body>
+        <h2>Choix du Véhicule</h2>
+        <select id= "select">
+        </select>
+        <button id="Refresh" type="button">Refresh</button>
+        <p id="batterieActuelle"></p>
+        <p id="tempsChargement"></p>
+    </body>
+
+
+        
+
+
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            ///////Déclaration///////
+            var socket = io();
+            var dico;
+            var text = document.getElementById('list');
+            var select = document.getElementById('select');
+            var refresh = document.getElementById('Refresh');
+            var batterie = document.getElementById('batterieActuelle');
+            var charge = document.getElementById('tempsChargement');
+
+
+
+            /////Listener//////
+
+            select.onchange = function() {
+                var tab = dico[select.value];
+                batterie.innerText = "Charge actuelle: "+tab[0] +"%";
+                charge.innerText = "Temps de chargement: "+tab[1] +" minutes";
+            }
+
+            socket.emit('getList');
+            refresh.onclick = function(){
+                socket.emit('getList');
+            };
+            socket.on('res',function(res){
+                dico = res.carListResult;
+                removeOptions();
+                console.log(dico);
+                for (var obj in dico){
+                    var opt = document.createElement("option");
+                    opt.value = obj;
+                    opt.text = obj;
+                    select.add(opt);
+                }
+                })
+            ////////Méthodes////////
+            function removeOptions() {
+                var i, L = select.options.length - 1;
+                for(i = L; i >= 0; i--) {
+                    select.remove(i);
+                }
+            }
+        </script>    
+
+    </body>
+</html>
