@@ -45,7 +45,9 @@
 
             select.onchange = function() {
                 var tab = dico[select.value];
-                batterie.innerText = "Charge disponible: "+tab[0]/60 + " heures et " + tab[0]%60 +" minutes";
+                var heure = tab[0]/60;
+                var minutes = tab[0]%60;
+                batterie.innerText = "Charge disponible: "+heure + ((minutes<0)?" heures et " + minutes +" minutes":"");
                 charge.innerText = "Temps de chargement: "+tab[1] +" minutes";
             }
 
