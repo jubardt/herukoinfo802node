@@ -38,7 +38,7 @@
             var refresh = document.getElementById('Refresh');
             var batterie = document.getElementById('batterieActuelle');
             var charge = document.getElementById('tempsChargement');
-
+            const url = 'https://info802-rest.herokuapp.com/tempsTrajet?autonomie=50&chargement=50&distance=100&vitesse=50'
 
 
             /////Listener//////
@@ -60,6 +60,15 @@
             refresh.onclick = function(){
                 socket.emit('getList');
             };
+
+            fetch(url)
+            .then(function(res) {
+                console.log(res);
+
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
             socket.on('res',function(res){
                 dico = res.carListResult;
                 removeOptions();

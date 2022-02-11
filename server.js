@@ -1,7 +1,7 @@
 const express = require('express');
 const socketIO = require('socket.io');
 var soap = require('soap');
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3000;
 
 const server = express().use(express.static("public"))
   .listen(port, () => console.log(`Listening on ${port}`));
