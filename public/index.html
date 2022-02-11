@@ -61,27 +61,18 @@
                 socket.emit('getList');
             };
 
-            /*
+            
+            //var url = "https://api.openweathermap.org/data/2.5/weather?q=Paris,fr&appid=c21a75b667d6f7abb81f118dcf8d4611&units=metric"
             var url = 'https://info802-rest.herokuapp.com/tempsTrajet?autonomie=50&chargement=50&distance=100&vitesse=50'
             fetch(url)
-            .then((res) {
+            .then(function(res) {
                 console.log(res);
 
             })
             .catch(function(err) {
                 console.log(err);
-            });*/
-            var url = "https://api.openweathermap.org/data/2.5/weather?q=Paris,fr&appid=c21a75b667d6f7abb81f118dcf8d4611&units=metric"
-
-            $.get(url, callBackGetSuccess).done(function() {
-    //alert( "second success" );
-  })
-            .fail(function() {
-            alert( "error" );
-            })
-            .always(function() {
-            alert( "finished" );
             });
+            
 
             socket.on('res',function(res){
                 dico = res.carListResult;
