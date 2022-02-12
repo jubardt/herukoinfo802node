@@ -5,24 +5,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 
 
-const server = express().use(function (req, res, next) {
-
-    // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'https://info802-rest.herokuapp.com/tempsTrajet?autonomie=50&chargement=50&distance=100&vitesse=50');
-
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-    // Set to true if you need the website to include cookies in the requests sent
-    // to the API (e.g. in case you use sessions)
-    res.setHeader('Access-Control-Allow-Credentials', true);
-
-    // Pass to next layer of middleware
-    next();
-}).use(express.static("public"))
+const server = express().use(express.static("public"))
   .listen(port, () => console.log(`Listening on ${port}`));
 
 const io = socketIO(server);
