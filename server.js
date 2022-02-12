@@ -6,7 +6,7 @@ const app = express();
 const cors = require('cors');
 
 
-const server = express().use(cors()).use(express.static("public"))
+const server = express().use(cors).use(express.static("public"))
   .listen(port, () => console.log(`Listening on ${port}`));
 
 const io = socketIO(server);
