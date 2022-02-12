@@ -22,12 +22,20 @@ io.on('connection', (socket)=>{
             });
         });
         
-    })
+    });
 
-    socket.on('calcReq',function(){
-        request('https://info802-rest.herokuapp.com/tempsTrajet?autonomie=50&chargement=50&distance=100&vitesse=50', { json: true }, (err, res, body) => {
+    socket.on('calcReq',function(param){
+        var text ="/tempsTrajet?";
+        text+="autonomie="+param["autonomie"]+"&";
+        text+="vitesse="+param["vitesse"]+"&";
+        text+="chargement="+param["chargement"]+"&";
+        text+="distance="+param["distance"];
+        console.log(text);
+
+        request('https://info802-rest.herokuapp.com'+text, { json: true }, (err, res, body) => {
             if (err) { return console.log(err); }
             console.log(res.body);
+            io.emit("resCalc",res.body);
           });
-    })
+    });
 })

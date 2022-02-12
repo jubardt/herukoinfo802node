@@ -15,12 +15,35 @@
     </header>
 
     <body>
-        <h2>Choix du Véhicule</h2>
-        <select id= "select">
-        </select>
-        <button id="Refresh" type="button">Refresh</button>
-        <p id="batterieActuelle"></p>
-        <p id="tempsChargement"></p>
+        <div>
+            <h2>Choix du Véhicule</h2>
+            <select id= "select">
+            </select>
+            <button id="Refresh" type="button">Refresh</button>
+            <p id="batterieActuelle"></p>
+            <p id="tempsChargement"></p>
+        </div>
+        <div>
+            <h2>Calcul du trajet</h>
+                <label>Autonomie (en min): </label>
+                    <input type="text" id="autonomie" name="autonomie">
+                
+                <br>
+                <label>Temps de charge (en min):</label>
+                    <input type="text" id="tempsCharge" name="tempsCharge">
+                
+                <br>
+                <label>Distance à parcourir (en min)</label>
+                    <input type="text" id="distance" name="distance">
+                
+                <br>
+                <label>Vitesse moyenne: (en km/h)</label>
+                    <input type="text" id="vitesse" name="vitesse">
+                <br>
+                <button id="calc">Calculer</button>
+            <p id="resultat"></p>
+        </div>
+        
     </body>
 
 
@@ -38,11 +61,11 @@
             var refresh = document.getElementById('Refresh');
             var batterie = document.getElementById('batterieActuelle');
             var charge = document.getElementById('tempsChargement');
+            var buttonCalc = document.getElementById("calc");
             
 
 
             /////Listener//////
-
             select.onchange = function() {
                 var tab = dico[select.value];
                 var heure = Math.floor(tab[1]/60);
@@ -56,23 +79,15 @@
                 batterie.innerText = "Autonomie: "+tab[0] +" km";
             }
 
+            buttonCalc.addEventListener('click',function(){
+                emitCalc();
+            });
+
+            ////SOCKET////
             socket.emit('getList');
             refresh.onclick = function(){
                 socket.emit('getList');
             };
-
-            
-            //var url = "https://api.openweathermap.org/data/2.5/weather?q=Paris,fr&appid=c21a75b667d6f7abb81f118dcf8d4611&units=metric"
-            var url = 'https://info802-rest.herokuapp.com/tempsTrajet?autonomie=50&chargement=50&distance=100&vitesse=50'
-            fetch(url)
-            .then(function(res){
-                console.log(res);
-
-            })
-            .catch(function(err){
-                console.log(err);
-            });
-            
 
             socket.on('res',function(res){
                 dico = res.carListResult;
@@ -84,13 +99,31 @@
                     opt.text = obj;
                     select.add(opt);
                 }
-                })
+                });
+            socket.on('resCalc',function(res){
+                console.log(res);
+                var textCalc = document.getElementById("resultat");
+                textCalc = "";
+                for(var obj in res){
+                    textCalc.innerText += obj+": "+res[obj]+" "; 
+                }
+            });
             ////////Méthodes////////
             function removeOptions() {
                 var i, L = select.options.length - 1;
                 for(i = L; i >= 0; i--) {
                     select.remove(i);
                 }
+            }
+
+            function emitCalc(){
+                var distanceInput = document.getElementById("distance").value;
+                var vitesseInput = document.getElementById("vitesse").value;
+                var chargeInput = document.getElementById("tempsCharge").value;
+                var autonomieInput = document.getElementById("autonomie").value;
+                var doc = {"autonomie":autonomieInput,"vitesse":vitesseInput,"distance":distanceInput,"chargement":chargeInput};
+                console.log(doc);
+                socket.emit('calcReq',doc);
             }
         </script>    
 
