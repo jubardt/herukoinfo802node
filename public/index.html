@@ -2,7 +2,9 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Préparation de trajet</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     </head>
     <body>
     <header>
@@ -14,11 +16,16 @@
 
     </header>
 
-    <body>
-        <div>
             <h2>Choix du Véhicule</h2>
-            <select id= "select">
-            </select>
+            
+            <div class="control has-icons-left">
+                <div class="select">
+                    <select id= "select">
+                    </select>
+                </div>
+                <span class="material-icons-outlined">directions_car_filled</span>
+            </div>
+
             <button id="Refresh" type="button">Refresh</button>
             <p id="batterieActuelle"></p>
             <p id="tempsChargement"></p>
@@ -40,11 +47,10 @@
                 <label>Vitesse moyenne: (en km/h)</label>
                     <input type="text" id="vitesse" name="vitesse">
                 <br>
-                <button id="calc">Calculer</button>
+                <button class="button is-primary" id="calc">Calculer</button>
             <p id="resultat"></p>
         </div>
         
-    </body>
 
 
         
@@ -103,7 +109,7 @@
             socket.on('resCalc',function(res){
                 console.log(res);
                 var textCalc = document.getElementById("resultat");
-                textCalc = "";
+                textCalc.innerText ="";
                 for(var obj in res){
                     textCalc.innerText += obj+": "+res[obj]+" "; 
                 }
