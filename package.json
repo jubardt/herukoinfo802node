@@ -10,8 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bulma": "^0.9.3",
-    "bulma-start": "^0.0.4",
     "express": "^4.17.2",
     "request": "^2.88.2",
     "soap": "^0.43.0",

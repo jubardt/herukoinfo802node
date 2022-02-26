@@ -5,38 +5,90 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Préparation de trajet</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+        <link rel="stylesheet" href="style.css">
     </head>
+    
     <body>
-    <header>
-        <h1>Préparation de trajet</h1>
-        <p>Ce site web permet la préparation d'itinéraire en fonction du véhicule éléctrique choisie !<br>
-            En fonction de l'état de la batterie et du temps de rechargement, vous pourrez ainsi <br>
-            préparer vos trajets sereinements
-        </p>
+        <!--Animation de fond-->
+        <div class="ripple-background">
+            <div class="circle xxlarge shade1"></div>
+            <div class="circle xlarge shade2"></div>
+            <div class="circle large shade3"></div>
+            <div class="circle mediun shade4"></div>
+            <div class="circle small shade5"></div>
+          </div>
 
-    </header>
-
-            <h2>Choix du Véhicule</h2>
-            
-            <div class="control has-icons-left">
-                <div class="select">
-                    <select id= "select">
-                    </select>
-                </div>
-                <span class="material-icons-outlined">directions_car_filled</span>
+        <div id="center">
+        <!--Header-->
+            <div class="box" id="header">
+                <h1 class="title">INFO802: Architecture orientées services</h1>
+                <p>Ce site web permet la préparation d'itinéraire en fonction du véhicule éléctrique choisie !<br>
+                    En fonction de l'état de la batterie et du temps de rechargement, vous pourrez ainsi <br>
+                    préparer vos trajets sereinements
+                </p>
             </div>
+        
+        <!--Choix du véhicule via service soap-->
+        <div  class="box">
+            <h2 class="title">Choix du Véhicule</h2>
+            <div id="choixVehicule">
+                <div  class="control">
+                    <div class="select">
+                        <select id= "select">
+                        </select>
+                    </div>
+                </div>
 
-            <button id="Refresh" type="button">Refresh</button>
+                <button id="Refresh" type="button" class="button is-info">Refresh</button>
+            </div>
             <p id="batterieActuelle"></p>
             <p id="tempsChargement"></p>
         </div>
-        <div>
-            <h2>Calcul du trajet</h>
-                <label>Autonomie (en min): </label>
+
+        <!--Calcul des informations de trajets via api rest flask-->
+        <div class="box">
+            <h2 class="title">Calcul du trajet</h2>
+
+            <div class="field">
+                <label class="label">Autonomie (en km): </label>
+                <div class="control">
+                  <input id="autonomie" class="input" type="text" placeholder="400 km">
+                </div>
+                <p class="help">Autonomie <strong>en kilomètre</strong> de votre véhicule</p>
+            </div>
+
+            <div class="field">
+                <label class="label">Temps de charge(en min): </label>
+                <div class="control">
+                  <input id="tempsCharge" class="input" type="text" placeholder="120 min">
+                </div>
+                <p class="help">Temps pour une charge complète de votre véhicule <strong>en minutes</strong></p>
+            </div>
+
+            <div class="field">
+                <label class="label">Distance à parcourir (en km): </label>
+                <div class="control">
+                  <input id="distance" class="input" type="text" placeholder="500 km">
+                </div>
+                <p class="help">Nombre total de <strong>kilomètres</strong> à parcourir durant le trajet</p>
+            </div>
+
+            <div class="field">
+                <label class="label">Vitesse moyenne du véhicule (en km/h): </label>
+                <div class="control">
+                  <input id="vitesse" class="input" type="text" placeholder="80 km/h">
+                </div>
+                <p class="help">Vitesse moyenne du véhicule <strong>(en kilomètres par heure)</strong> durant le trajet</p>
+            </div>
+
+
+
+
+                <!--<label>Autonomie (en km): </label>
                     <input type="text" id="autonomie" name="autonomie">
                 
                 <br>
-                <label>Temps de charge (en min):</label>
+                <label>Temps de charge (en km):</label>
                     <input type="text" id="tempsCharge" name="tempsCharge">
                 
                 <br>
@@ -46,11 +98,18 @@
                 <br>
                 <label>Vitesse moyenne: (en km/h)</label>
                     <input type="text" id="vitesse" name="vitesse">
-                <br>
-                <button class="button is-primary" id="calc">Calculer</button>
+                <br>-->
+                <button class="button is-info" id="calc">Calculer</button>
             <p id="resultat"></p>
         </div>
-        
+
+        <div class = "box">
+            <h2 class="title">Choix du trajet</h1>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d22269.710190156322!2d5.68221855!3d45.75688385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2sfr!4v1645904340946!5m2!1sfr!2sfr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+    <!--Choix de l'itinéraire via API externe-->
+    </div>  
 
 
         
@@ -132,6 +191,13 @@
                 socket.emit('calcReq',doc);
             }
         </script>    
-
     </body>
+    <footer class="footer">
+        <div class="content has-text-centered">
+        <p>
+            <strong>INFO804 Rendu TP</strong> by <strong>Jubard Théo</strong>. The source code can be found on my github for the
+            <a href="https://github.com/jubardt/herukoinfo802node">Node server</a>, <a href="https://github.com/jubardt/herukoinfo802rest">REST API</a> and <a href="https://github.com/jubardt/herukoinfo802soap">SOAP service</a>.
+        </p>
+        </div>
+    </footer>
 </html>
