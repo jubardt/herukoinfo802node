@@ -49,6 +49,9 @@ html, body {
       }
   }*/
 
+  .ripple-background{
+    z-index: -10 !important;
+  }
   .circle{
     position: absolute;
     border-radius: 50%;
@@ -62,6 +65,7 @@ html, body {
     height: 200px;
     left: -100px;
     bottom: -100px;
+    z-index: -10 !important;
   }
   
   .medium{
@@ -69,6 +73,7 @@ html, body {
     height: 400px;
     left: -200px;
     bottom: -200px;
+    z-index: -10 !important;
   }
   
   .large{
@@ -76,6 +81,7 @@ html, body {
     height: 600px;
     left: -300px;
     bottom: -300px;
+    z-index: -10 !important;
   }
   
   .xlarge{
@@ -83,6 +89,7 @@ html, body {
     height: 800px;
     left: -400px;
     bottom: -400px;
+    z-index: -10 !important;
   }
   
   .xxlarge{
@@ -90,6 +97,7 @@ html, body {
     height: 1000px;
     left: -500px;
     bottom: -500px;
+    z-index: -10 !important;
   }
   
   .shade1{
