@@ -81,24 +81,6 @@
                 <p class="help">Vitesse moyenne du véhicule <strong>(en kilomètres par heure)</strong> durant le trajet</p>
             </div>
 
-
-
-
-                <!--<label>Autonomie (en km): </label>
-                    <input type="text" id="autonomie" name="autonomie">
-                
-                <br>
-                <label>Temps de charge (en km):</label>
-                    <input type="text" id="tempsCharge" name="tempsCharge">
-                
-                <br>
-                <label>Distance à parcourir (en min)</label>
-                    <input type="text" id="distance" name="distance">
-                
-                <br>
-                <label>Vitesse moyenne: (en km/h)</label>
-                    <input type="text" id="vitesse" name="vitesse">
-                <br>-->
                 <button class="button is-info" id="calc">Calculer</button>
             <p id="resultat"></p>
         </div>
@@ -107,6 +89,8 @@
             <h2 class="title">Choix du trajet</h1>
             <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d22269.710190156322!2d5.68221855!3d45.75688385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2sfr!4v1645904340946!5m2!1sfr!2sfr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
+            <!--The div element for the map -->
+        <!--<div class="box" id="map"></div>-->
 
     <!--Choix de l'itinéraire via API externe-->
     </div>  
@@ -132,16 +116,24 @@
 
             /////Listener//////
             select.onchange = function() {
-                var tab = dico[select.value];
-                var heure = Math.floor(tab[1]/60);
-                var minutes = tab[1]%60;
-                if(heure==0){
-                    charge.innerText = "Temps de chargement: "+ minutes +" minutes";
+                if(select.value == "Aucun"){
+                    charge.innerText = "";
+                    batterie.innerText = "";
+                    document.getElementById("autonomie").value = "";
+                    document.getElementById("tempsCharge").value = "";
                 }else{
-                    charge.innerText = "Temps de chargement: "+heure + " heure(s) " + ((minutes>0)?"et " + minutes +" minutes":"");
+                    var tab = dico[select.value];
+                    var heure = Math.floor(tab[1]/60);
+                    var minutes = tab[1]%60;
+                    if(heure==0){
+                        charge.innerText = "Temps de chargement:"+ minutes +" minutes";
+                    }else{
+                        charge.innerText = "Temps de chargement:"+heure + " heure(s) " + ((minutes>0)?"et " + minutes +" minutes":"");
+                    }
+                    batterie.innerText = "Autonomie: "+tab[0] +" km";
+                    document.getElementById("autonomie").value = tab[0]+"";
+                    document.getElementById("tempsCharge").value = tab[1]+"";
                 }
-                
-                batterie.innerText = "Autonomie: "+tab[0] +" km";
             }
 
             buttonCalc.addEventListener('click',function(){
@@ -157,7 +149,12 @@
             socket.on('res',function(res){
                 dico = res.carListResult;
                 removeOptions();
-                console.log(dico);
+                //Ajout de l'option aucun
+                var aucun = document.createElement("option");
+                aucun.value = "Aucun";
+                aucun.text = "Aucun";
+                select.add(aucun);
+                //Boucle sur les véhicules
                 for (var obj in dico){
                     var opt = document.createElement("option");
                     opt.value = obj;
@@ -190,7 +187,7 @@
                 console.log(doc);
                 socket.emit('calcReq',doc);
             }
-        </script>    
+        </script> 
     </body>
     <footer class="footer">
         <div class="content has-text-centered">
