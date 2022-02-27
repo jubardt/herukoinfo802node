@@ -82,7 +82,7 @@
             </div>
 
                 <button class="button is-info" id="calc">Calculer</button>
-            <p id="resultat"></p>
+            <div id="resultat"></div>
         </div>
 
         <div class = "box">
@@ -163,11 +163,50 @@
                 }
                 });
             socket.on('resCalc',function(res){
+                //Lorsque l'on obtient le résultat de l'api REST
                 console.log(res);
                 var textCalc = document.getElementById("resultat");
-                textCalc.innerText ="";
+                //On enlève les résultats précédent
+                var child = textCalc.lastElementChild; 
+                while (child) {
+                    textCalc.removeChild(child);
+                    child = textCalc.lastElementChild;
+                }
+
+                //On parcours les resultats et on les affiches 
                 for(var obj in res){
-                    textCalc.innerText += obj+": "+res[obj]+" "; 
+                    
+                    var fin = "";
+                    var tagVal = ""
+                    if(obj == "nombreDeCharge"){
+                        fin = " charge(s)";
+                        tagVal = " nombre de charge(s)";
+                    }else{
+                        fin = " minute(s)";
+                    }
+                    
+                    if(obj == "tempsDeCharge"){
+                        tagVal = "Temps de charge total (en min)";
+                    }else if(obj == "DureeParcours"){
+                        tagVal = "Temps de charge total (en min)";
+                    }else if(obj == "DureeTotal"){
+                        tagVal = "Durée total du parcours (en min)";
+                    }
+
+                    //Création div englobant nos résultats
+                    var divMom = document.createElement("div");
+                    divMom.className = "tags has-addons";
+                    var spanRes = document.createElement("span");
+                    spanRes.className = "tag is-medium is-info";
+                    var pRes = document.createElement("p");
+                    pRes.className = "tag is-medium";
+                    spanRes.innerHTML = obj;
+                    pRes.innerHTML = res[obj]+fin;
+
+                    divMom.append(spanRes);
+                    divMom.append(pRes);
+                    textCalc.append(divMom);
+                    //textCalc.innerText += obj+": "+res[obj]+" "; 
                 }
             });
             ////////Méthodes////////
