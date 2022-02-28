@@ -1,27 +1,19 @@
 //VARIABLES GLOBALES//////////
 let depart = null;
 let arrive = null;
-let point = null;
 let pointsList = [];
 let calcButton = null;
 let functionP = null;
 let map;
 let marker = null;
 let markersList = [];
+let chargedMarker = [];
 
 
 
 
 
 //FONCTIONS////////////////////
-//On efface les markers sur la carte
-function setMapOnAll(map) {
-    document.getElementById("pointId").innerHTML = "";
-    for (let i = 0; i < markersList.length; i++) {
-        markersList[i].setMap(map);
-    }
-  }
-
 //INITIALISATION DE LA MAP
 function initMap() {
     //Variable
@@ -78,10 +70,10 @@ function initMap() {
         directionsRenderer.setDirections({routes:[]});
         depart = null;
         arrive = null;
-        point = null;
         pointsList = [];
         marker = null;
-        point = null;
+        chargedMarker = [];
+        deleteMarkers();
         markersList = [];
         if(selectM.value == "pointBorne"){
             document.getElementById("trajetPC").style.display = "none";
@@ -89,8 +81,8 @@ function initMap() {
             document.getElementById("pointBorneP").style.display = "block";
             map.addListener("click", (mapsMouseEvent) => {
                 var res = mapsMouseEvent.latLng.toJSON();
-                point = { lat: res.lat , lng: res.lng };
-                addPoint();
+                var point = { lat: res.lat , lng: res.lng };
+                addPoint(point);
                 });
             resetButton.addEventListener('click',()=>{
                 setMapOnAll(null);
@@ -176,14 +168,19 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
         window.alert("Une erreur est survenue lors de l'accès à la carte. La raison: " + e)
     });
 }
-
+//On efface les markers sur la carte
+function setMapOnAll(map) {
+    document.getElementById("pointId").innerHTML = "";
+    for (let i = 0; i < markersList.length; i++) {
+        markersList[i].setMap(map);
+    }
+  }
 // Deletes all markers in the array by removing references to them.
 function deleteMarkers() {
     setMapOnAll(null);
     markersList = [];
 }
-function addPoint() {
-    if(point){
+function addPoint(point) {
         document.getElementById('pointId').innerHTML =  "latitude: "+ point.lat +", longitude: "+point.lng;
         marker = new google.maps.Marker({
             position: point,
@@ -191,12 +188,9 @@ function addPoint() {
         });
         marker.setMap(map);
         markersList.push(marker);
-    }
 }
 
 
 ///ASTUCES A GARDER
-//console.log(response.routes["0"].overview_path);
-
 //response.routes[0].legs[0].distance.text ; //Pour la distance du trajet
 //response.routes[0].legs[0].duration.text ; //Pour le temps du trajet
