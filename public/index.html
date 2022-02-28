@@ -6,6 +6,7 @@
         <title>Préparation de trajet</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
         <link rel="stylesheet" href="style.css">
+        <script src="mapScript.js"></script>
     </head>
     
     <body>
@@ -85,14 +86,33 @@
             <div id="resultat"></div>
         </div>
 
-        <div class = "box">
-            <h2 class="title">Choix du trajet</h1>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d22269.710190156322!2d5.68221855!3d45.75688385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2sfr!4v1645904340946!5m2!1sfr!2sfr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-        </div>
-            <!--The div element for the map -->
-        <!--<div class="box" id="map"></div>-->
 
-    <!--Choix de l'itinéraire via API externe-->
+        <!--Affichage de la carte via l'API GOOGLE-->
+        <div class="box" id="blocMap">
+            <div>
+                <h1 class="title">Carte du trajet</h1>
+                <div id="map"></div>
+            </div>
+            <div>
+                <h1 class="title">Paramètres</h1>
+                <div  class="control">
+                    <div class="select">
+                        <select id= "select">
+                            <option value="trajetClick">Définir un trajet en cliquant sur la carte</option>
+                            <option value="trajetAdresse">Définir un trajet en entrant l'adresse de départ et d'arrivée</option>
+                            <option value="pointBorne">Clique afin de connaître les bornes aux alentours</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <!--Choix de l'itinéraire via API externe-->
+        <!-- Import du script google map et affichage de la carte lorsque l'import est terminé. -->
+        <script async
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDikKF4R-RteohqZnXiwKoSqFuJgnddFw&callback=initMap&libraries=&v=weekly">
+        </script>
     </div>  
 
 
