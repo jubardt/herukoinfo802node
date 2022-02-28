@@ -97,12 +97,61 @@
                 <h1 class="title">Paramètres</h1>
                 <div  class="control">
                     <div class="select">
-                        <select id= "select">
+                        <select id="selectM">
                             <option value="trajetClick">Définir un trajet en cliquant sur la carte</option>
                             <option value="trajetAdresse">Définir un trajet en entrant l'adresse de départ et d'arrivée</option>
                             <option value="pointBorne">Clique afin de connaître les bornes aux alentours</option>
                         </select>
                     </div>
+                </div>
+                <div id="pointBorneP">
+                    <div class="tags has-addons">
+                        <span class="tag is-large is-info">Point choisie</span>
+                        <p class="tag is-large"></p>
+                    </div>
+                </div>
+                <div id="trajetPC" style="display: none;">
+                    <div class="tags has-addons">
+                        <span class="tag is-large is-success">Départ</span>
+                        <p class="tag is-large"></p>
+                    </div>
+                    <div class="tags has-addons">
+                        <span class="tag is-large is-danger">Arrivé</span>
+                        <p class="tag is-large"></p>
+                    </div>
+                    <div class="tags has-addons">
+                        <span class="tag is-large is-info">Distance</span>
+                        <p class="tag is-large"></p>
+                    </div>
+                    <div class="tags has-addons">
+                        <span class="tag is-large is-info">Temps du trajet</span>
+                        <p class="tag is-large"></p>
+                    </div>
+                </div>
+                <div id="trajetP" style="display: none;">
+                    <div class="field">
+                        <label class="label">Point de départ: </label>
+                        <div class="control">
+                          <input id="departM" class="input" type="text" placeholder="Chambéry">
+                        </div>
+                        <p class="help">Point de départ pouvant être une ville ou une adresse</p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Point d'arrivée: </label>
+                        <div class="control">
+                          <input id="arriveM" class="input" type="text" placeholder="Annecy">
+                        </div>
+                        <p class="help">Point d'arrivée pouvant être une ville ou une adresse</p>
+                    </div>
+                    <div class="tags has-addons">
+                        <span class="tag is-large is-info">Distance</span>
+                        <p class="tag is-large"></p>
+                    </div>
+                    <div class="tags has-addons">
+                        <span class="tag is-large is-info">Temps du trajet</span>
+                        <p class="tag is-large"></p>
+                    </div>
+                    <button class="button is-info" id="trajetButton">Calculer</button>
                 </div>
 
             </div>
@@ -131,6 +180,7 @@
             var batterie = document.getElementById('batterieActuelle');
             var charge = document.getElementById('tempsChargement');
             var buttonCalc = document.getElementById("calc");
+
             
 
 
