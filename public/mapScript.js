@@ -3,8 +3,6 @@ let depart = null;
 let arrive = null;
 let point = null;
 let pointsList = null;
-let selectM = null;
-let estTrajet
 
 
 
@@ -33,6 +31,12 @@ function initMap() {
     //Listener sur le select pour le type de recherche
     selectM = document.getElementById("selectM");
     selectM.onchange = function() {
+        //On reset les listeners ainsi que les variables globales
+        google.maps.event.clearListeners(map, 'click');
+        depart = null;
+        arrive = null;
+        point = null;
+        pointsList = null;
         if(selectM.value == "pointBorne"){
             document.getElementById("trajetPC").style.display = "none";
             document.getElementById("trajetP").style.display = "none";
@@ -41,6 +45,37 @@ function initMap() {
             document.getElementById("trajetPC").style.display = "block";
             document.getElementById("trajetP").style.display = "none";
             document.getElementById("pointBorneP").style.display = "none";
+            //Listener pour le trajet entre 2 click
+            map.addListener("click", (mapsMouseEvent) => {
+                var departIn = document.getElementById("departPC");
+                var arriveeIn = document.getElementById("arriveePC");
+                var distancePC = document.getElementById("distancePC");
+                var tempsPC = document.getElementById("tempsPC");
+                var res = mapsMouseEvent.latLng.toJSON();
+                if(!depart){
+                    departIn.innerHTML ="";
+                    arriveeIn.innerHTML ="";
+                    distancePC.innerHTML ="";
+                    tempsPC.innerHTML ="";
+                    depart = { lat: res.lat , lng: res.lng };
+                    departIn.innerHTML = "latitude: "+ depart.lat +", longitude: "+depart.lng;
+                    //console.log(depart);
+                }else if((depart)&&(arrive)){
+                    depart = null;
+                    arrive = null;
+                    depart = { lat: res.lat , lng: res.lng };
+                    departIn.innerHTML ="";
+                    arriveeIn.innerHTML ="";
+                    distancePC.innerHTML ="";
+                    tempsPC.innerHTML ="";
+                    departIn.innerHTML = "latitude: "+ depart.lat +", longitude: "+depart.lng;
+                }else{
+                    arrive = { lat: res.lat , lng: res.lng };
+                    //console.log(arrive);
+                    arriveeIn.innerHTML = "latitude: "+ arrive.lat +", longitude: "+arrive.lng;
+                    calculateAndDisplayRoute(directionsService, directionsRenderer);
+                }
+                });
         }else if(selectM.value == "trajetAdresse"){
             document.getElementById("trajetPC").style.display = "none";
             document.getElementById("trajetP").style.display = "block";
@@ -48,30 +83,14 @@ function initMap() {
         }
     };
     
-    //Listener pour le trajet entre 2 click
-    map.addListener("click", (mapsMouseEvent) => {
-        var res = mapsMouseEvent.latLng.toJSON();
-        if(!depart){
-            console.log("j'attribue le debut")
-            depart = { lat: res.lat , lng: res.lng };
-            console.log(depart);
-        }else if((depart)&&(arrive)){
-            console.log("je reset le parcours")
-            depart = null;
-            arrive = null;
-            depart = { lat: res.lat , lng: res.lng };
-        }else{
-            console.log("j'attribue la fin")
-            arrive = { lat: res.lat , lng: res.lng };
-            console.log(arrive);
-            calculateAndDisplayRoute(directionsService, directionsRenderer);
-        }
-        });
+
 
     }
 
 //Méthode d'affichage du trajet entre 2 points
 function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+    var distancePC = document.getElementById("distancePC");
+    var tempsPC = document.getElementById("tempsPC");
     directionsService
         .route({
         origin: depart,
@@ -80,8 +99,9 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
         unitSystem: google.maps.UnitSystem.METRIC
         })
         .then((response) => {
-            console.log(response.routes[0].legs[0].distance.text);
-            console.log(response.routes[0].legs[0].duration.text);
+
+            distancePC.innerHTML = response.routes[0].legs[0].distance.text;
+            tempsPC.innerHTML =response.routes[0].legs[0].duration.text;
             directionsRenderer.setDirections(response);
         })
         .catch((e) =>{
