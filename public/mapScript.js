@@ -16,6 +16,7 @@ let chargedMarker = [];
 //FONCTIONS////////////////////
 //INITIALISATION DE LA MAP
 function initMap() {
+
     //Variable
     calcButton = document.getElementById('trajetButton');
     resetButton = document.getElementById('resetPoints');
@@ -72,9 +73,11 @@ function initMap() {
         arrive = null;
         pointsList = [];
         marker = null;
-        chargedMarker = [];
-        deleteMarkers();
+        
+        deleteMarkers(markersList);
+        deleteMarkers(chargedMarker);
         markersList = [];
+        chargedMarker = [];
         if(selectM.value == "pointBorne"){
             document.getElementById("trajetPC").style.display = "none";
             document.getElementById("trajetP").style.display = "none";
@@ -85,7 +88,8 @@ function initMap() {
                 addPoint(point);
                 });
             resetButton.addEventListener('click',()=>{
-                setMapOnAll(null);
+                deleteMarkers(markersList);
+                deleteMarkers(chargedMarker);
             });
         }else if(selectM.value == "trajetClick") {
             document.getElementById("trajetPC").style.display = "block";
@@ -153,12 +157,6 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
         unitSystem: google.maps.UnitSystem.METRIC
         })
         .then((response) => {
-            var inter = response.routes["0"].overview_path;
-            console.log(response);
-            /*for(var i in inter){
-                console.log(inter[i].lat);
-                console.log(inter[i].lng);
-            }*/
             if(distancePC){
                 document.getElementById("departPC").innerHTML = response.routes[0].legs[0].start_address;
                 document.getElementById("arriveePC").innerHTML = response.routes[0].legs[0].end_address;
@@ -177,28 +175,45 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
     });
 }
 //On efface les markers sur la carte
-function setMapOnAll(map) {
+function setMapOnAll(map,list) {
     document.getElementById("pointId").innerHTML = "";
-    for (let i = 0; i < markersList.length; i++) {
-        markersList[i].setMap(map);
+    for (let i = 0; i < list.length; i++) {
+        list[i].setMap(map);
     }
   }
 // Deletes all markers in the array by removing references to them.
-function deleteMarkers() {
-    setMapOnAll(null);
-    markersList = [];
+function deleteMarkers(list) {
+    setMapOnAll(null,list);
+    list = [];
 }
 function addPoint(point) {
         document.getElementById('pointId').innerHTML =  "latitude: "+ point.lat +", longitude: "+point.lng;
         marker = new google.maps.Marker({
+            animation: google.maps.Animation.DROP,
             position: point,
-            title:"Ici !"
         });
         marker.setMap(map);
         markersList.push(marker);
+        getBornesFromPoint(point);
 }
 
+function getBornesFromPoint(point){
+    fetch('https://opendata.reseaux-energies.fr/api/records/1.0/search/?dataset=bornes-irve&q=&rows=18&geofilter.distance='+point.lat+'%2C'+point.lng+'%2C30000')
+    .then(response => response.json())
+    .then(json => getBornesFromPointUpdate(json.records)); 
+}
 
-///ASTUCES A GARDER
-//response.routes[0].legs[0].distance.text ; //Pour la distance du trajet
-//response.routes[0].legs[0].duration.text ; //Pour le temps du trajet
+function getBornesFromPointUpdate(data){
+    console.log(data);
+        for(var i in data){
+            test = { lat: data[i].fields.ylatitude , lng: data[i].fields.xlongitude };
+            marker = new google.maps.Marker({
+                animation: google.maps.Animation.DROP,
+                position: test,
+                label: "B"
+            });
+            marker.setMap(map);
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+            chargedMarker.push(marker);
+        }
+}
