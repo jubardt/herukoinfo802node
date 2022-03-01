@@ -14,6 +14,7 @@ var url = 'https://serve-python-soap.herokuapp.com/?wsdl';
 io.on('connection', (socket)=>{
     console.log('client connecte');
 
+    //Si on demande une liste de véhicule, on renvoi le resultat de l'appel au SOAP
     socket.on('getList',function(){
         soap.createClient(url, function(err, client) {
             client.carList(args, function(err, result) {
@@ -24,6 +25,7 @@ io.on('connection', (socket)=>{
         
     });
 
+    //Si on demande un calcul, on renvoi le resultat de l'appel au REST
     socket.on('calcReq',function(param){
         var text ="/tempsTrajet?";
         text+="autonomie="+param["autonomie"]+"&";

@@ -212,11 +212,13 @@
             });
 
             ////SOCKET////
+            //émission de demande des véhicules
             socket.emit('getList');
             refresh.onclick = function(){
                 socket.emit('getList');
             };
 
+            //Lors de la réception de la liste des véhicules, je l'affiche de le select
             socket.on('res',function(res){
                 dico = res.carListResult;
                 removeOptions();
@@ -233,6 +235,8 @@
                     select.add(opt);
                 }
                 });
+
+            //Lorsque je reçois le calcul du temps de parcours, je l'affiche
             socket.on('resCalc',function(res){
                 //Lorsque l'on obtient le résultat de l'api REST
                 console.log(res);
@@ -281,6 +285,7 @@
                 }
             });
             ////////Méthodes////////
+            //Supprime les options présents dans le choix des véhicules
             function removeOptions() {
                 var i, L = select.options.length - 1;
                 for(i = L; i >= 0; i--) {
@@ -288,6 +293,7 @@
                 }
             }
 
+            //Envoi de la demande de calcul en fonction du formulaire
             function emitCalc(){
                 var distanceInput = document.getElementById("distance").value;
                 var vitesseInput = document.getElementById("vitesse").value;
