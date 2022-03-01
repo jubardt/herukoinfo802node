@@ -229,18 +229,21 @@ function addPoint(point) {
         getBornesFromPoint(point);
 }
 
+//Appel à l'api pour connaitre les bornes dans le cas d'un seul point
 function getBornesFromPoint(point){
     fetch('https://opendata.reseaux-energies.fr/api/records/1.0/search/?dataset=bornes-irve&q=&rows=10&geofilter.distance='+point.lat+'%2C'+point.lng+'%2C10000')
     .then(response => response.json())
     .then(json => getBornesFromPointUpdate(json.records)); 
 }
 
+//Appel à l'api pour connaitre les bornes dans le cas d'une liste de points
 function getBornesFromPointList(point){
     fetch('https://opendata.reseaux-energies.fr/api/records/1.0/search/?dataset=bornes-irve&q=&rows=10&geofilter.distance='+point.lat+'%2C'+point.lng+'%2C10000')
     .then(response => response.json())
     .then(json => getBornesFromPointUpdateList(json.records)); 
 }
 
+//Ajout des markers sur la carte en fonction des données reçu par l'api pour un seul point
 function getBornesFromPointUpdate(data){
         for(var i in data){
             test = { lat: data[i].fields.ylatitude , lng: data[i].fields.xlongitude };
@@ -256,6 +259,7 @@ function getBornesFromPointUpdate(data){
         }
 }
 
+//Ajout des markers sur la carte en fonction des données reçu par l'api pour une liste
 function getBornesFromPointUpdateList(data){
     for(var i in data){
         test = { lat: data[i].fields.ylatitude , lng: data[i].fields.xlongitude };
@@ -275,12 +279,13 @@ function getBornesFromPointUpdateList(data){
 }
 
 
+//Recherche des bornes disponibles pour la liste des points du trajet.
+//Pour rendre le processus moins lourd, on ignore certains point enregistré, ceux-ci affichant les mêmes bornes
 function makeMarkers(data){
     var compte = 0;
     data.forEach((e)=>{
         if(compte%10==0){
             pointInter = { lat: parseFloat(e.toUrlValue(6).split(',')[0]) , lng: parseFloat(e.toUrlValue(6).split(',')[1]) };
-            //getBornesFromPoint(pointInter);
             getBornesFromPointList(pointInter);
         }
         compte ++;
@@ -288,6 +293,7 @@ function makeMarkers(data){
     
 }
 
+//Vérifie si un point est déjà dans la liste ou non
 function estDansList(point){
     for(var inter in pointsChargedList){
         if((inter.lat == point.lat)&&(inter.lng == point.lng)){
