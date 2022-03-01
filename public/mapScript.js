@@ -236,7 +236,7 @@ function getBornesFromPoint(point){
 }
 
 function getBornesFromPointList(point){
-    fetch('https://opendata.reseaux-energies.fr/api/records/1.0/search/?dataset=bornes-irve&q=&rows=10&geofilter.distance='+point.lat+'%2C'+point.lng+'%2C4000')
+    fetch('https://opendata.reseaux-energies.fr/api/records/1.0/search/?dataset=bornes-irve&q=&rows=10&geofilter.distance='+point.lat+'%2C'+point.lng+'%2C10000')
     .then(response => response.json())
     .then(json => getBornesFromPointUpdateList(json.records)); 
 }
