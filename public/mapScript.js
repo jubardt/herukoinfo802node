@@ -153,7 +153,15 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
         unitSystem: google.maps.UnitSystem.METRIC
         })
         .then((response) => {
+            var inter = response.routes["0"].overview_path;
+            console.log(response);
+            /*for(var i in inter){
+                console.log(inter[i].lat);
+                console.log(inter[i].lng);
+            }*/
             if(distancePC){
+                document.getElementById("departPC").innerHTML = response.routes[0].legs[0].start_address;
+                document.getElementById("arriveePC").innerHTML = response.routes[0].legs[0].end_address;
                 distancePC.innerHTML = response.routes[0].legs[0].distance.text;
                 tempsPC.innerHTML =response.routes[0].legs[0].duration.text;
             }
@@ -165,7 +173,7 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
         })
         .catch((e) =>{
         console.log(e);
-        window.alert("Une erreur est survenue lors de l'accès à la carte. La raison: " + e)
+        window.alert("Une erreur est survenue lors de l'accès à la carte. Vérifiez l'exactitude de vos informations");
     });
 }
 //On efface les markers sur la carte
